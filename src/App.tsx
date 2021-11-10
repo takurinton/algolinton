@@ -1,43 +1,46 @@
-import { useState } from 'react'
-import logo from './logo.svg'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
+import algoliasearch from 'algoliasearch';
+
+const APPLICATION_ID = import.meta.env.VITE_APPLICATION_ID as string;
+const ADMIN_APT_KEY = import.meta.env.VITE_ADMIN_API_KEY as string;
+
 function App() {
-  const [count, setCount] = useState(0)
+  const client = algoliasearch(APPLICATION_ID, ADMIN_APT_KEY);
+  const index = client.initIndex('takurinton');
+
+  const [state, setState] = useState({ search: '' });
+  const [res, setRes] = useState<any[] | undefined>([]);
+
+  const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const v = event.target.value;
+    setState({ search: v });
+
+    index
+      .search(v)
+      .then(({ hits }) => {
+        setRes(hits);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div style={{ margin: '100px 0', textAlign: 'center' }}>
+      <input type="text" name="search" onChange={handleChangeValue} style={{ fontSize: '1.4rem' }} placeholder='キーワードを入力'/>
+      <div>
+        {
+          res?.map((r, index) => (
+            <div key={index.toString()}>
+              <h1>{r.title}</h1>
+              <p>{r.pub_date}</p>
+              <hr />
+            </div>
+          ))
+        }
+      </div>
     </div>
   )
 }
