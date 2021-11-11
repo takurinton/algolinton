@@ -7,6 +7,8 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@types/react-instantsearch-core": "^6.10.5",
+    "@types/react-instantsearch-dom": "^6.12.0",
     "ingred-ui": "^9.2.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
