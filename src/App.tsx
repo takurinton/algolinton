@@ -6,8 +6,9 @@ import {
   Button,
 } from "ingred-ui";
 import algoliasearch from 'algoliasearch';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
+import { InstantSearch, Hits } from 'react-instantsearch-dom';
 import { useCallback, useState } from "react";
+import SearchBox from './SearchBox';
 
 const APPLICATION_ID = import.meta.env.VITE_APPLICATION_ID as string;
 const ADMIN_APT_KEY = import.meta.env.VITE_ADMIN_API_KEY as string;
